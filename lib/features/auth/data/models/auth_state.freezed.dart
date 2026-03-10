@@ -21,7 +21,8 @@ mixin _$AuthState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(int userId, String username) authenticated,
+    required TResult Function(int userId, String username, String loginMode)
+    authenticated,
     required TResult Function() unauthenticated,
     required TResult Function(String message) error,
   }) => throw _privateConstructorUsedError;
@@ -29,7 +30,8 @@ mixin _$AuthState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(int userId, String username)? authenticated,
+    TResult? Function(int userId, String username, String loginMode)?
+    authenticated,
     TResult? Function()? unauthenticated,
     TResult? Function(String message)? error,
   }) => throw _privateConstructorUsedError;
@@ -37,7 +39,8 @@ mixin _$AuthState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(int userId, String username)? authenticated,
+    TResult Function(int userId, String username, String loginMode)?
+    authenticated,
     TResult Function()? unauthenticated,
     TResult Function(String message)? error,
     required TResult orElse(),
@@ -134,7 +137,8 @@ class _$InitialImpl implements _Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(int userId, String username) authenticated,
+    required TResult Function(int userId, String username, String loginMode)
+    authenticated,
     required TResult Function() unauthenticated,
     required TResult Function(String message) error,
   }) {
@@ -146,7 +150,8 @@ class _$InitialImpl implements _Initial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(int userId, String username)? authenticated,
+    TResult? Function(int userId, String username, String loginMode)?
+    authenticated,
     TResult? Function()? unauthenticated,
     TResult? Function(String message)? error,
   }) {
@@ -158,7 +163,8 @@ class _$InitialImpl implements _Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(int userId, String username)? authenticated,
+    TResult Function(int userId, String username, String loginMode)?
+    authenticated,
     TResult Function()? unauthenticated,
     TResult Function(String message)? error,
     required TResult orElse(),
@@ -259,7 +265,8 @@ class _$LoadingImpl implements _Loading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(int userId, String username) authenticated,
+    required TResult Function(int userId, String username, String loginMode)
+    authenticated,
     required TResult Function() unauthenticated,
     required TResult Function(String message) error,
   }) {
@@ -271,7 +278,8 @@ class _$LoadingImpl implements _Loading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(int userId, String username)? authenticated,
+    TResult? Function(int userId, String username, String loginMode)?
+    authenticated,
     TResult? Function()? unauthenticated,
     TResult? Function(String message)? error,
   }) {
@@ -283,7 +291,8 @@ class _$LoadingImpl implements _Loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(int userId, String username)? authenticated,
+    TResult Function(int userId, String username, String loginMode)?
+    authenticated,
     TResult Function()? unauthenticated,
     TResult Function(String message)? error,
     required TResult orElse(),
@@ -346,7 +355,7 @@ abstract class _$$AuthenticatedImplCopyWith<$Res> {
     $Res Function(_$AuthenticatedImpl) then,
   ) = __$$AuthenticatedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({int userId, String username});
+  $Res call({int userId, String username, String loginMode});
 }
 
 /// @nodoc
@@ -362,7 +371,11 @@ class __$$AuthenticatedImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? userId = null, Object? username = null}) {
+  $Res call({
+    Object? userId = null,
+    Object? username = null,
+    Object? loginMode = null,
+  }) {
     return _then(
       _$AuthenticatedImpl(
         userId: null == userId
@@ -373,6 +386,10 @@ class __$$AuthenticatedImplCopyWithImpl<$Res>
             ? _value.username
             : username // ignore: cast_nullable_to_non_nullable
                   as String,
+        loginMode: null == loginMode
+            ? _value.loginMode
+            : loginMode // ignore: cast_nullable_to_non_nullable
+                  as String,
       ),
     );
   }
@@ -381,16 +398,22 @@ class __$$AuthenticatedImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$AuthenticatedImpl implements _Authenticated {
-  const _$AuthenticatedImpl({required this.userId, required this.username});
+  const _$AuthenticatedImpl({
+    required this.userId,
+    required this.username,
+    required this.loginMode,
+  });
 
   @override
   final int userId;
   @override
   final String username;
+  @override
+  final String loginMode;
 
   @override
   String toString() {
-    return 'AuthState.authenticated(userId: $userId, username: $username)';
+    return 'AuthState.authenticated(userId: $userId, username: $username, loginMode: $loginMode)';
   }
 
   @override
@@ -400,11 +423,13 @@ class _$AuthenticatedImpl implements _Authenticated {
             other is _$AuthenticatedImpl &&
             (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.username, username) ||
-                other.username == username));
+                other.username == username) &&
+            (identical(other.loginMode, loginMode) ||
+                other.loginMode == loginMode));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, userId, username);
+  int get hashCode => Object.hash(runtimeType, userId, username, loginMode);
 
   /// Create a copy of AuthState
   /// with the given fields replaced by the non-null parameter values.
@@ -419,11 +444,12 @@ class _$AuthenticatedImpl implements _Authenticated {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(int userId, String username) authenticated,
+    required TResult Function(int userId, String username, String loginMode)
+    authenticated,
     required TResult Function() unauthenticated,
     required TResult Function(String message) error,
   }) {
-    return authenticated(userId, username);
+    return authenticated(userId, username, loginMode);
   }
 
   @override
@@ -431,11 +457,12 @@ class _$AuthenticatedImpl implements _Authenticated {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(int userId, String username)? authenticated,
+    TResult? Function(int userId, String username, String loginMode)?
+    authenticated,
     TResult? Function()? unauthenticated,
     TResult? Function(String message)? error,
   }) {
-    return authenticated?.call(userId, username);
+    return authenticated?.call(userId, username, loginMode);
   }
 
   @override
@@ -443,13 +470,14 @@ class _$AuthenticatedImpl implements _Authenticated {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(int userId, String username)? authenticated,
+    TResult Function(int userId, String username, String loginMode)?
+    authenticated,
     TResult Function()? unauthenticated,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (authenticated != null) {
-      return authenticated(userId, username);
+      return authenticated(userId, username, loginMode);
     }
     return orElse();
   }
@@ -499,10 +527,12 @@ abstract class _Authenticated implements AuthState {
   const factory _Authenticated({
     required final int userId,
     required final String username,
+    required final String loginMode,
   }) = _$AuthenticatedImpl;
 
   int get userId;
   String get username;
+  String get loginMode;
 
   /// Create a copy of AuthState
   /// with the given fields replaced by the non-null parameter values.
@@ -556,7 +586,8 @@ class _$UnauthenticatedImpl implements _Unauthenticated {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(int userId, String username) authenticated,
+    required TResult Function(int userId, String username, String loginMode)
+    authenticated,
     required TResult Function() unauthenticated,
     required TResult Function(String message) error,
   }) {
@@ -568,7 +599,8 @@ class _$UnauthenticatedImpl implements _Unauthenticated {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(int userId, String username)? authenticated,
+    TResult? Function(int userId, String username, String loginMode)?
+    authenticated,
     TResult? Function()? unauthenticated,
     TResult? Function(String message)? error,
   }) {
@@ -580,7 +612,8 @@ class _$UnauthenticatedImpl implements _Unauthenticated {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(int userId, String username)? authenticated,
+    TResult Function(int userId, String username, String loginMode)?
+    authenticated,
     TResult Function()? unauthenticated,
     TResult Function(String message)? error,
     required TResult orElse(),
@@ -708,7 +741,8 @@ class _$ErrorImpl implements _Error {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(int userId, String username) authenticated,
+    required TResult Function(int userId, String username, String loginMode)
+    authenticated,
     required TResult Function() unauthenticated,
     required TResult Function(String message) error,
   }) {
@@ -720,7 +754,8 @@ class _$ErrorImpl implements _Error {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(int userId, String username)? authenticated,
+    TResult? Function(int userId, String username, String loginMode)?
+    authenticated,
     TResult? Function()? unauthenticated,
     TResult? Function(String message)? error,
   }) {
@@ -732,7 +767,8 @@ class _$ErrorImpl implements _Error {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(int userId, String username)? authenticated,
+    TResult Function(int userId, String username, String loginMode)?
+    authenticated,
     TResult Function()? unauthenticated,
     TResult Function(String message)? error,
     required TResult orElse(),

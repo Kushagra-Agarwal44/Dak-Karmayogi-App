@@ -12,6 +12,7 @@ class UserModel with _$UserModel {
     required String email, // since login is via userId
     required String role,
     required String username,
+    @JsonKey(name: "login_mode") required String loginMode,
   }) = _UserModel;
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
@@ -26,6 +27,7 @@ extension UserModelMapper on UserModel {
       email: email,
       role: role,
       username: username,
+      loginMode: loginMode,
     );
   }
 }

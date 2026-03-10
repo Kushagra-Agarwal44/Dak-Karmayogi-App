@@ -1,11 +1,15 @@
+import 'package:dak_karmayogi_app/core/providers/core_providers.dart';
 import 'package:dak_karmayogi_app/core/storage/secure_storage_service.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AuthInterceptor extends Interceptor {
   final SecureStorageService _storage;
   final Dio _dio;
-
-  AuthInterceptor(this._storage, this._dio);
+  final Ref _ref;
+  bool isRefreshing = false;
+  // Moved to class level so it acts as a true lock across multiple concurrent errors
+  AuthInterceptor(this._storage, this._dio, this._ref);
 
   @override
   void onRequest(
@@ -23,78 +27,57 @@ class AuthInterceptor extends Interceptor {
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
-    print("ERROR STATUS: ${err.response?.statusCode}");
-    print("ERROR PATH: ${err.requestOptions.path}");
-    if (err.response?.statusCode == 401) {
+    final status = err.response?.statusCode;
+
+    // If it's a token error, not already refreshing, and not the refresh endpoint itself
+    if ((status == 401 || status == 402) &&
+        err.requestOptions.path != "/refresh" &&
+        !isRefreshing) {
+      isRefreshing = true;
+
       try {
         final refreshToken = await _storage.getRefreshToken();
 
         if (refreshToken == null) {
           await _storage.clear();
+          _ref.read(sessionExpiredProvider.notifier).state = true;
           return handler.next(err);
         }
-        //  ❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌
-        //⚠️ _dio already has the interceptor attached.
 
-        // If /refresh returns 401 → infinite recursion possible.
+        // Use a new Dio instance without interceptors to avoid infinite loops
+        final refreshDio = Dio(BaseOptions(baseUrl: _dio.options.baseUrl));
 
-        // Call refresh API
-        final response = await _dio.post(
+        final response = await refreshDio.post(
           "/refresh",
-          data: {"refreshToken": refreshToken},
+          data: {"refresh_token": refreshToken},
         );
 
-        final newAccessToken = response.data["accessToken"];
-        final newRefreshToken = response.data["refreshToken"];
+        final newAccessToken = response.data["data"]["access_token"];
+        // Might be null based on new API
+        final newRefreshToken = response.data["data"]["refresh_token"];
 
-        // Save new tokens
         await _storage.saveTokens(
           accessToken: newAccessToken,
-          refreshToken: newRefreshToken,
+          // FIX: Preserve the existing token if a new one wasn't provided
+          refreshToken: newRefreshToken ?? refreshToken,
         );
 
-        // Retry original request
+        // Update the failed request with the new token
         final requestOptions = err.requestOptions;
         requestOptions.headers['Authorization'] = 'Bearer $newAccessToken';
 
+        // Retry the failed request silently
         final clonedResponse = await _dio.fetch(requestOptions);
 
         return handler.resolve(clonedResponse);
       } catch (_) {
         await _storage.clear();
+        _ref.read(sessionExpiredProvider.notifier).state = true;
+      } finally {
+        isRefreshing = false;
       }
     }
-
+    // Pass the error onward if we couldn't handle it
     handler.next(err);
   }
 }
-
-
-
-// ❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌
-//When refresh fails:
-
-// await _storage.clear();
-
-// But UI is never informed.
-
-// Router won’t know.
-
-// User will still think he’s logged in.
-
-// ✅ STEP 5 — Fix Interceptor (VERY IMPORTANT)
-
-// We remove refresh logic from interceptor.
-
-// Why?
-
-// Because:
-
-// 👉 We now validate session at app start
-// 👉 Interceptor should only handle expired access token during runtime
-
-// Production pattern:
-
-// Interceptor refreshes silently
-
-// If refresh fails → trigger logout via callback

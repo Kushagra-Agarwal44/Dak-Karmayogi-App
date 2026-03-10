@@ -7,17 +7,7 @@ part 'login_response_model.g.dart';
 
 
 
-// @freezed
-// class LoginResponseModel with _$LoginResponseModel{
-//   const factory LoginResponseModel({
-//     required String accessToken,
-//     required String refreshToken,
-//     required UserModel user,
-//   })= _LoginResponseModel;
 
-//   factory LoginResponseModel.fromJson(Map<String, dynamic> json)
-//       => _$LoginResponseModelFromJson(json);
-// }
  @freezed
 class LoginResponseModel with _$LoginResponseModel {
   const factory LoginResponseModel({
@@ -34,7 +24,8 @@ class LoginResponseModel with _$LoginResponseModel {
 class LoginData with _$LoginData {
   const factory LoginData({
     @JsonKey(name: "access_token") required String accessToken,
-    @JsonKey(name: "refresh_token") required String refreshToken,
+    // FIX: Made nullable because the refresh API doesn't return it
+    @JsonKey(name: "refresh_token") required String? refreshToken,
     required UserModel user,
   }) = _LoginData;
 

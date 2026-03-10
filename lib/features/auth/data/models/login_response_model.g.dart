@@ -25,7 +25,7 @@ Map<String, dynamic> _$$LoginResponseModelImplToJson(
 _$LoginDataImpl _$$LoginDataImplFromJson(Map<String, dynamic> json) =>
     _$LoginDataImpl(
       accessToken: json['access_token'] as String,
-      refreshToken: json['refresh_token'] as String,
+      refreshToken: json['refresh_token'] as String?,
       user: UserModel.fromJson(json['user'] as Map<String, dynamic>),
     );
 

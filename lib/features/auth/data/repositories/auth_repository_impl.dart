@@ -6,17 +6,11 @@ import 'package:dak_karmayogi_app/features/auth/domain/entities/user.dart';
 import 'package:dak_karmayogi_app/features/auth/domain/repositories/auth_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-
-
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
   final storage = ref.read(secureStorageProvider);
-  final dataSource = ref.read(AuthRemoteDataSourceProvider);
+  final dataSource = ref.read(authRemoteDataSourceProvider);
   return AuthRepositoryImpl(dataSource, storage);
 });
-
-
-
-
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource remoteDataSource;
@@ -25,19 +19,22 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl(this.remoteDataSource, this.secureStorage);
 
   @override
-  Future<User> login({required String userId, required String password}) async {
+  Future<User> login({
+    required String username,
+    required String password,
+    required String loginMode,
+  }) async {
     final response = await remoteDataSource.login(
-      userId: userId,
+      username: username,
       password: password,
+      loginMode: loginMode,
     );
-print("ye response aaya hai ${response.toString()}");
+    print("ye response aaya hai ${response.toString()}");
     await secureStorage.saveTokens(
       // accessToken: response.accessToken,
       // refreshToken: response.refreshToken,
-
-  accessToken: response.data.accessToken,
-  refreshToken: response.data.refreshToken,
-
+      accessToken: response.data.accessToken,
+      refreshToken: response.data.refreshToken ?? "",
     );
 
     return response.data.user.toEntity();
@@ -47,47 +44,45 @@ print("ye response aaya hai ${response.toString()}");
   Future<void> logout() async {
     await secureStorage.clear();
   }
-  
+
   @override
-  Future<String?> getAccessToken() async{
-     return await secureStorage.getAccessToken();
+  Future<String?> getAccessToken() async {
+    return await secureStorage.getAccessToken();
   }
-  
+
   @override
   Future<String?> getStoredUserId() {
     // TODO: implement getStoredUserId
     throw UnimplementedError();
   }
-  
+
   @override
   Future<String?> getStoredUsername() {
     // TODO: implement getStoredUsername
     throw UnimplementedError();
   }
 
-@override
-Future<User?> validateSession() async {
-  final refreshToken = await secureStorage.getRefreshToken();
+  @override
+  Future<User?> validateSession() async {
+    final currentRefreshToken = await secureStorage.getRefreshToken();
 
-  if (refreshToken == null) {
-    return null;
+    if (currentRefreshToken == null) {
+      return null;
+    }
+
+    try {
+      final response = await remoteDataSource.refreshToken(currentRefreshToken);
+
+      await secureStorage.saveTokens(
+        accessToken: response.data.accessToken,
+        // FIX: If API doesn't return a new refresh token, keep the old one!
+        refreshToken: response.data.refreshToken ?? currentRefreshToken,
+      );
+
+      return response.data.user.toEntity();
+    } catch (_) {
+      await secureStorage.clear();
+      return null;
+    }
   }
-
-  try {
-    final response = await remoteDataSource.refreshToken(refreshToken);
-
-    await secureStorage.saveTokens(
-      accessToken: response.data.accessToken,
-      refreshToken: response.data.refreshToken,
-    );
-
-    return response.data.user.toEntity();
-  } catch (_) {
-    await secureStorage.clear();
-    return null;
-  }
-}
-
-
-
 }

@@ -9,10 +9,12 @@ class LoginUseCase {
   Future<User> call({
     required String userId,
     required String password,
+    required String loginMode,
   }) {
     return repository.login(
-      userId: userId,
+      username: userId,
       password: password,
+      loginMode: loginMode,
     );
   }
 }

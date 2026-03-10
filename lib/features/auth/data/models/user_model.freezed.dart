@@ -27,6 +27,8 @@ mixin _$UserModel {
       throw _privateConstructorUsedError; // since login is via userId
   String get role => throw _privateConstructorUsedError;
   String get username => throw _privateConstructorUsedError;
+  @JsonKey(name: "login_mode")
+  String get loginMode => throw _privateConstructorUsedError;
 
   /// Serializes this UserModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -49,6 +51,7 @@ abstract class $UserModelCopyWith<$Res> {
     String email,
     String role,
     String username,
+    @JsonKey(name: "login_mode") String loginMode,
   });
 }
 
@@ -72,6 +75,7 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
     Object? email = null,
     Object? role = null,
     Object? username = null,
+    Object? loginMode = null,
   }) {
     return _then(
       _value.copyWith(
@@ -95,6 +99,10 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
                 ? _value.username
                 : username // ignore: cast_nullable_to_non_nullable
                       as String,
+            loginMode: null == loginMode
+                ? _value.loginMode
+                : loginMode // ignore: cast_nullable_to_non_nullable
+                      as String,
           )
           as $Val,
     );
@@ -116,6 +124,7 @@ abstract class _$$UserModelImplCopyWith<$Res>
     String email,
     String role,
     String username,
+    @JsonKey(name: "login_mode") String loginMode,
   });
 }
 
@@ -138,6 +147,7 @@ class __$$UserModelImplCopyWithImpl<$Res>
     Object? email = null,
     Object? role = null,
     Object? username = null,
+    Object? loginMode = null,
   }) {
     return _then(
       _$UserModelImpl(
@@ -161,6 +171,10 @@ class __$$UserModelImplCopyWithImpl<$Res>
             ? _value.username
             : username // ignore: cast_nullable_to_non_nullable
                   as String,
+        loginMode: null == loginMode
+            ? _value.loginMode
+            : loginMode // ignore: cast_nullable_to_non_nullable
+                  as String,
       ),
     );
   }
@@ -175,6 +189,7 @@ class _$UserModelImpl implements _UserModel {
     required this.email,
     required this.role,
     required this.username,
+    @JsonKey(name: "login_mode") required this.loginMode,
   });
 
   factory _$UserModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -191,10 +206,13 @@ class _$UserModelImpl implements _UserModel {
   final String role;
   @override
   final String username;
+  @override
+  @JsonKey(name: "login_mode")
+  final String loginMode;
 
   @override
   String toString() {
-    return 'UserModel(id: $id, empname: $empname, email: $email, role: $role, username: $username)';
+    return 'UserModel(id: $id, empname: $empname, email: $email, role: $role, username: $username, loginMode: $loginMode)';
   }
 
   @override
@@ -207,13 +225,15 @@ class _$UserModelImpl implements _UserModel {
             (identical(other.email, email) || other.email == email) &&
             (identical(other.role, role) || other.role == role) &&
             (identical(other.username, username) ||
-                other.username == username));
+                other.username == username) &&
+            (identical(other.loginMode, loginMode) ||
+                other.loginMode == loginMode));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, id, empname, email, role, username);
+      Object.hash(runtimeType, id, empname, email, role, username, loginMode);
 
   /// Create a copy of UserModel
   /// with the given fields replaced by the non-null parameter values.
@@ -236,6 +256,7 @@ abstract class _UserModel implements UserModel {
     required final String email,
     required final String role,
     required final String username,
+    @JsonKey(name: "login_mode") required final String loginMode,
   }) = _$UserModelImpl;
 
   factory _UserModel.fromJson(Map<String, dynamic> json) =
@@ -251,6 +272,9 @@ abstract class _UserModel implements UserModel {
   String get role;
   @override
   String get username;
+  @override
+  @JsonKey(name: "login_mode")
+  String get loginMode;
 
   /// Create a copy of UserModel
   /// with the given fields replaced by the non-null parameter values.

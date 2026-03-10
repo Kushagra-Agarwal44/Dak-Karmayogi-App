@@ -235,9 +235,9 @@ LoginData _$LoginDataFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$LoginData {
   @JsonKey(name: "access_token")
-  String get accessToken => throw _privateConstructorUsedError;
+  String get accessToken => throw _privateConstructorUsedError; // FIX: Made nullable because the refresh API doesn't return it
   @JsonKey(name: "refresh_token")
-  String get refreshToken => throw _privateConstructorUsedError;
+  String? get refreshToken => throw _privateConstructorUsedError;
   UserModel get user => throw _privateConstructorUsedError;
 
   /// Serializes this LoginData to a JSON map.
@@ -257,7 +257,7 @@ abstract class $LoginDataCopyWith<$Res> {
   @useResult
   $Res call({
     @JsonKey(name: "access_token") String accessToken,
-    @JsonKey(name: "refresh_token") String refreshToken,
+    @JsonKey(name: "refresh_token") String? refreshToken,
     UserModel user,
   });
 
@@ -280,7 +280,7 @@ class _$LoginDataCopyWithImpl<$Res, $Val extends LoginData>
   @override
   $Res call({
     Object? accessToken = null,
-    Object? refreshToken = null,
+    Object? refreshToken = freezed,
     Object? user = null,
   }) {
     return _then(
@@ -289,10 +289,10 @@ class _$LoginDataCopyWithImpl<$Res, $Val extends LoginData>
                 ? _value.accessToken
                 : accessToken // ignore: cast_nullable_to_non_nullable
                       as String,
-            refreshToken: null == refreshToken
+            refreshToken: freezed == refreshToken
                 ? _value.refreshToken
                 : refreshToken // ignore: cast_nullable_to_non_nullable
-                      as String,
+                      as String?,
             user: null == user
                 ? _value.user
                 : user // ignore: cast_nullable_to_non_nullable
@@ -324,7 +324,7 @@ abstract class _$$LoginDataImplCopyWith<$Res>
   @useResult
   $Res call({
     @JsonKey(name: "access_token") String accessToken,
-    @JsonKey(name: "refresh_token") String refreshToken,
+    @JsonKey(name: "refresh_token") String? refreshToken,
     UserModel user,
   });
 
@@ -347,7 +347,7 @@ class __$$LoginDataImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? accessToken = null,
-    Object? refreshToken = null,
+    Object? refreshToken = freezed,
     Object? user = null,
   }) {
     return _then(
@@ -356,10 +356,10 @@ class __$$LoginDataImplCopyWithImpl<$Res>
             ? _value.accessToken
             : accessToken // ignore: cast_nullable_to_non_nullable
                   as String,
-        refreshToken: null == refreshToken
+        refreshToken: freezed == refreshToken
             ? _value.refreshToken
             : refreshToken // ignore: cast_nullable_to_non_nullable
-                  as String,
+                  as String?,
         user: null == user
             ? _value.user
             : user // ignore: cast_nullable_to_non_nullable
@@ -384,9 +384,10 @@ class _$LoginDataImpl implements _LoginData {
   @override
   @JsonKey(name: "access_token")
   final String accessToken;
+  // FIX: Made nullable because the refresh API doesn't return it
   @override
   @JsonKey(name: "refresh_token")
-  final String refreshToken;
+  final String? refreshToken;
   @override
   final UserModel user;
 
@@ -428,7 +429,7 @@ class _$LoginDataImpl implements _LoginData {
 abstract class _LoginData implements LoginData {
   const factory _LoginData({
     @JsonKey(name: "access_token") required final String accessToken,
-    @JsonKey(name: "refresh_token") required final String refreshToken,
+    @JsonKey(name: "refresh_token") required final String? refreshToken,
     required final UserModel user,
   }) = _$LoginDataImpl;
 
@@ -437,10 +438,10 @@ abstract class _LoginData implements LoginData {
 
   @override
   @JsonKey(name: "access_token")
-  String get accessToken;
+  String get accessToken; // FIX: Made nullable because the refresh API doesn't return it
   @override
   @JsonKey(name: "refresh_token")
-  String get refreshToken;
+  String? get refreshToken;
   @override
   UserModel get user;
 

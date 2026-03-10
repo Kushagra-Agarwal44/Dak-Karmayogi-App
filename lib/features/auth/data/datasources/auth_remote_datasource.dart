@@ -5,12 +5,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 abstract class AuthRemoteDataSource {
   Future<LoginResponseModel> login({
-    required String userId,
+    required String username,
     required String password,
+    required String loginMode,
   });
+  Future<LoginResponseModel> refreshToken(String refreshToken);
 }
 
-final AuthRemoteDataSourceProvider = Provider((ref){
+final authRemoteDataSourceProvider = Provider((ref){
   final dio = ref.read(dioProvider);
   return AuthRemoteDatasourceImpl(dio);
 });
@@ -22,24 +24,19 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<LoginResponseModel> login({
-    required String userId,
+    required String username,
     required String password,
+    required String loginMode
   }) async {
     print("kam se kam request initiate hui remotedatasource me ");
-    // final response = await dio.post(
-    //   '/login',
-    //   data: {"username": userId, "password": password},
-    // );
-    // return LoginResponseModel.fromJson(response.data);
-
-
 
     try {
   final response = await dio.post(
     "/login",
     data: {
-      "username": userId,
+      "username": username,
       "password": password,
+      "login_mode": loginMode,
     },
   );
 
@@ -52,7 +49,7 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDataSource {
 }
   }
 
-
+@override
   Future<LoginResponseModel> refreshToken(String refreshToken) async {
   final response = await dio.post(
     "/refresh",
