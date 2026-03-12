@@ -5,6 +5,7 @@ class AppColors {
   // Primary Colors
   static const primary = Color(0xFFC9252C); // Maroon
   static const secondary = Color(0xFF4A6181); // Dark Gray
+static const backgroundcolor =        Color(0xFFF5F5F5);
 
   // Text Colors
   static const textPrimary = Color(0xFF212121);
