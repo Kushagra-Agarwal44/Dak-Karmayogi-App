@@ -21,7 +21,10 @@ mixin _$ProfileState {
   List<FieldOfInterestEntity>? get interests =>
       throw _privateConstructorUsedError;
   bool get isLoading => throw _privateConstructorUsedError;
+  bool get isUpdating =>
+      throw _privateConstructorUsedError; // Added for save button loading state
   String? get error => throw _privateConstructorUsedError;
+  String? get updateError => throw _privateConstructorUsedError;
 
   /// Create a copy of ProfileState
   /// with the given fields replaced by the non-null parameter values.
@@ -41,7 +44,9 @@ abstract class $ProfileStateCopyWith<$Res> {
     ProfileEntity? profile,
     List<FieldOfInterestEntity>? interests,
     bool isLoading,
+    bool isUpdating,
     String? error,
+    String? updateError,
   });
 }
 
@@ -63,7 +68,9 @@ class _$ProfileStateCopyWithImpl<$Res, $Val extends ProfileState>
     Object? profile = freezed,
     Object? interests = freezed,
     Object? isLoading = null,
+    Object? isUpdating = null,
     Object? error = freezed,
+    Object? updateError = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -79,9 +86,17 @@ class _$ProfileStateCopyWithImpl<$Res, $Val extends ProfileState>
                 ? _value.isLoading
                 : isLoading // ignore: cast_nullable_to_non_nullable
                       as bool,
+            isUpdating: null == isUpdating
+                ? _value.isUpdating
+                : isUpdating // ignore: cast_nullable_to_non_nullable
+                      as bool,
             error: freezed == error
                 ? _value.error
                 : error // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            updateError: freezed == updateError
+                ? _value.updateError
+                : updateError // ignore: cast_nullable_to_non_nullable
                       as String?,
           )
           as $Val,
@@ -102,7 +117,9 @@ abstract class _$$ProfileStateImplCopyWith<$Res>
     ProfileEntity? profile,
     List<FieldOfInterestEntity>? interests,
     bool isLoading,
+    bool isUpdating,
     String? error,
+    String? updateError,
   });
 }
 
@@ -123,7 +140,9 @@ class __$$ProfileStateImplCopyWithImpl<$Res>
     Object? profile = freezed,
     Object? interests = freezed,
     Object? isLoading = null,
+    Object? isUpdating = null,
     Object? error = freezed,
+    Object? updateError = freezed,
   }) {
     return _then(
       _$ProfileStateImpl(
@@ -139,9 +158,17 @@ class __$$ProfileStateImplCopyWithImpl<$Res>
             ? _value.isLoading
             : isLoading // ignore: cast_nullable_to_non_nullable
                   as bool,
+        isUpdating: null == isUpdating
+            ? _value.isUpdating
+            : isUpdating // ignore: cast_nullable_to_non_nullable
+                  as bool,
         error: freezed == error
             ? _value.error
             : error // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        updateError: freezed == updateError
+            ? _value.updateError
+            : updateError // ignore: cast_nullable_to_non_nullable
                   as String?,
       ),
     );
@@ -155,7 +182,9 @@ class _$ProfileStateImpl implements _ProfileState {
     this.profile,
     final List<FieldOfInterestEntity>? interests,
     this.isLoading = false,
+    this.isUpdating = false,
     this.error,
+    this.updateError,
   }) : _interests = interests;
 
   @override
@@ -174,11 +203,17 @@ class _$ProfileStateImpl implements _ProfileState {
   @JsonKey()
   final bool isLoading;
   @override
+  @JsonKey()
+  final bool isUpdating;
+  // Added for save button loading state
+  @override
   final String? error;
+  @override
+  final String? updateError;
 
   @override
   String toString() {
-    return 'ProfileState(profile: $profile, interests: $interests, isLoading: $isLoading, error: $error)';
+    return 'ProfileState(profile: $profile, interests: $interests, isLoading: $isLoading, isUpdating: $isUpdating, error: $error, updateError: $updateError)';
   }
 
   @override
@@ -193,7 +228,11 @@ class _$ProfileStateImpl implements _ProfileState {
             ) &&
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading) &&
-            (identical(other.error, error) || other.error == error));
+            (identical(other.isUpdating, isUpdating) ||
+                other.isUpdating == isUpdating) &&
+            (identical(other.error, error) || other.error == error) &&
+            (identical(other.updateError, updateError) ||
+                other.updateError == updateError));
   }
 
   @override
@@ -202,7 +241,9 @@ class _$ProfileStateImpl implements _ProfileState {
     profile,
     const DeepCollectionEquality().hash(_interests),
     isLoading,
+    isUpdating,
     error,
+    updateError,
   );
 
   /// Create a copy of ProfileState
@@ -219,7 +260,9 @@ abstract class _ProfileState implements ProfileState {
     final ProfileEntity? profile,
     final List<FieldOfInterestEntity>? interests,
     final bool isLoading,
+    final bool isUpdating,
     final String? error,
+    final String? updateError,
   }) = _$ProfileStateImpl;
 
   @override
@@ -229,7 +272,11 @@ abstract class _ProfileState implements ProfileState {
   @override
   bool get isLoading;
   @override
+  bool get isUpdating; // Added for save button loading state
+  @override
   String? get error;
+  @override
+  String? get updateError;
 
   /// Create a copy of ProfileState
   /// with the given fields replaced by the non-null parameter values.

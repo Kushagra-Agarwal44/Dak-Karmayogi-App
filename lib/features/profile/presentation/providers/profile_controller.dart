@@ -32,4 +32,21 @@ class ProfileController extends StateNotifier<ProfileState> {
       state = state.copyWith(isLoading: false, error: e.toString());
     }
   }
+
+  Future<bool> updateProfile(Map<String, dynamic> payload) async {
+    state = state.copyWith(isUpdating: true, updateError: null);
+    try {
+      await repository.updateProfile(payload);
+      // Re-fetch the entire profile to perfectly sync local state with DB
+      await fetchProfileData(); 
+      state = state.copyWith(isUpdating: false);
+      return true;
+    } catch (e) {
+      state = state.copyWith(isUpdating: false, updateError: e.toString());
+      return false;
+    }
+  }
 }
+
+// Global providers to fetch cascading dropdown data easily
+final profileRepositoryGetter = Provider((ref) => ref.read(profileRepositoryProvider));

@@ -27,4 +27,30 @@ class ProfileRepositoryImpl implements ProfileRepository {
     final models = await remoteDataSource.getFieldOfInterests();
     return models.map((model) => model.toEntity()).toList();
   }
+
+  @override
+  Future<void> updateProfile(Map<String, dynamic> payload) async {
+    await remoteDataSource.updateProfile(payload);
+  }
+
+  @override
+  Future<List<String>> getCircleList() => remoteDataSource.getCircleList();
+  
+  @override
+  Future<List<String>> getRegionList(String circle) => remoteDataSource.getRegionList(circle);
+  
+  @override
+  Future<List<String>> getDivisionList(String circle, String region) => remoteDataSource.getDivisionList(circle, region);
+  
+  @override
+  Future<List<String>> getBloodGroupList() => remoteDataSource.getBloodGroupList();
+  
+  @override
+  Future<List<String>> getQualificationList() => remoteDataSource.getQualificationList();
+  
+  @override
+  Future<List<String>> getCategoryList() => remoteDataSource.getCategoryList();
+  
+  @override
+  Future<List<String>> getRelationList() => remoteDataSource.getRelationList();
 }
